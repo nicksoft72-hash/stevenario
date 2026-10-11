@@ -24,6 +24,21 @@ function getSimulatedSteveAnswer(userQuestion: string): string {
   return "Dipende da come la vedi! Comunque ci penso io, conosco uno.\n\n*«Steve ha parlato. Ora offrimi da bere.»*";
 }
 
+// Endpoint GET per verificare lo stato di connessione con la vera AI
+export async function GET() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  const isAiConnected = Boolean(
+    apiKey && apiKey !== "TUACHIAVE_QUI" && apiKey.trim().length > 0
+  );
+
+  return NextResponse.json({
+    isAiConnected,
+    model: "Google Gemini 2.5 Flash",
+    trainer: SITE_CONFIG.info.creator,
+  });
+}
+
+// Endpoint POST per chattare con Steve
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -47,11 +62,11 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Chiamata alle Google Gemini API tramite l'SDK ufficiale
+    // Chiamata alla VERA AI di Google Gemini tramite l'SDK ufficiale
     const ai = new GoogleGenAI({ apiKey });
     const systemPrompt = getSteveSystemPrompt();
 
-    // Costruiamo la cronologia se presente
+    // Costruiamo la cronologia dei messaggi
     const formattedContents: Array<{ role: string; parts: Array<{ text: string }> }> = [];
 
     if (Array.isArray(history) && history.length > 0) {
@@ -65,19 +80,20 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Aggiungiamo la domanda corrente
     formattedContents.push({
       role: "user",
       parts: [{ text: message }]
     });
 
-    // Richiesta a Gemini (gemini-2.5-flash)
+    // Generazione della risposta con il modello Gemini 2.5 Flash addestrato
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: formattedContents,
       config: {
         systemInstruction: systemPrompt,
         temperature: 0.85,
-        maxOutputTokens: 600,
+        maxOutputTokens: 800,
       }
     });
 
@@ -85,10 +101,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       reply: replyText,
-      isSimulated: false
+      isSimulated: false,
     });
   } catch (error: unknown) {
-    console.error("Errore API:", error);
+    console.error("Errore API Gemini:", error);
     const simulatedFallback = getSimulatedSteveAnswer("generica");
     return NextResponse.json({
       reply: simulatedFallback,
