@@ -2,7 +2,7 @@
 
 import React from "react";
 import { X, HeartHandshake, User, Calendar, Clock, Sparkles } from "lucide-react";
-import { DEFAULT_STEVE_CONFIG } from "@/config/stevenario";
+import { DEFAULT_STEVE_CONFIG, SITE_CONFIG } from "@/config/stevenario";
 import { sound } from "@/lib/sound";
 
 interface InfoModalProps {
@@ -92,7 +92,7 @@ export function InfoModal({ isOpen, onClose }: InfoModalProps) {
         {/* Footer */}
         <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
           <span className="text-xs text-slate-500 flex items-center gap-1.5">
-            <HeartHandshake className="w-4 h-4 text-rose-500" /> Risate tra amici
+            <HeartHandshake className="w-4 h-4 text-rose-500" /> {SITE_CONFIG.infoFooterBadge || "Risate tra amici"}
           </span>
           <button
             onClick={() => {

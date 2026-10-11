@@ -36,7 +36,7 @@ export default function Home() {
         <div className="text-center space-y-2 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200/90 text-xs font-medium text-slate-700 shadow-2xs">
             <Flame className="w-3.5 h-3.5 text-amber-500" />
-            <span>Edizione Speciale Amici</span>
+            <span>{SITE_CONFIG.headerBadgeText || "Edizione Speciale Amici"}</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
@@ -132,7 +132,7 @@ export default function Home() {
           </button>
         </div>
         <p className="text-[11px] text-slate-400">
-          Stevenario © 2026 — Creato da {SITE_CONFIG.info.creator} per farsi due risate tra amici.
+          {SITE_CONFIG.friendName}nario © 2026 — {SITE_CONFIG.footerText}
         </p>
       </footer>
 

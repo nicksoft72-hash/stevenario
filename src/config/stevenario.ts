@@ -63,6 +63,15 @@ export const SITE_CONFIG = {
   // Messaggio iniziale con cui Steve accoglie gli amici appena aprono la chat
   welcomeMessage: "Oh, ciao ragà! Ditemi pure, ma fate in fretta che tra 5 minuti devo uscire (spoiler: non è vero, sono ancora sul divano in pigiama). Cosa volete sapere?",
 
+  // Il badge sopra il titolo "Benvenuti nello Stevenario"
+  headerBadgeText: "Edizione Speciale Amici",
+
+  // Testo in fondo alla pagina (footer)
+  footerText: "Creato da Nick per farsi due risate tra amici.",
+
+  // Testo accanto al cuore nel menù Informazioni (tasto 'i')
+  infoFooterBadge: "Risate tra amici",
+
   // ==========================================================================
   // ℹ️ 4. INFORMAZIONI CREATORE (visibili cliccando su 'i' in alto)
   // ==========================================================================
