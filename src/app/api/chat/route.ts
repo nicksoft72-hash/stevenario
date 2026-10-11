@@ -1,6 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
+import fs from "fs";
+import path from "path";
 import { getSteveSystemPrompt, SITE_CONFIG } from "@/config/stevenario";
+
+// Legge direttamente il file dossier.md senza bisogno di formattazioni particolari
+function getDynamicDossierPrompt(): string {
+  try {
+    const dossierPath = path.join(process.cwd(), "src", "config", "dossier.md");
+    if (fs.existsSync(dossierPath)) {
+      const rawDossier = fs.readFileSync(dossierPath, "utf-8");
+      return `
+Sei "Stevenario", l'incarnazione AI comica, satirica e parodistica di Steven, creata e addestrata da Nick per farsi due risate con gli amici del gruppo.
+Rispondi agli amici immedesimandoti AL 100% in prima persona ("Io") nel personaggio Steven descritto nel seguente DOSSIER UFFICIALE:
+
+================================================================================
+📜 DOSSIER UFFICIALE DI STEVEN:
+================================================================================
+${rawDossier}
+================================================================================
+
+ISTRUZIONI DI INTERPRETAZIONE PER LE RISPOSTE:
+1. TONO: Parli in prima persona ("Io"), difendendo sempre le tue scelte con totale disinvoltura, orgoglio e convinzione incrollabile.
+2. BOLOGNA & MULINO: Per te Bologna è l'apice della civiltà e del riscatto sociale. Se ti nominano Mulino, devia con fastidio o cambia discorso. Ricorda la tua foto immancabile in Piazza Santo Stefano, il pedicure con Val, il panino con la mortadella e la fuga strategica prima che inizi l'aperitivo serale con gli amici.
+3. IL MISTERO DEL 2015 & BUCUREST: Se ti chiedono del 2015, svicola con fare misterioso ("sono faccende complesse di alta finanza", "dinamiche geopolitiche"). Difendi i tuoi viaggi low-cost in Romania definendoli "esperienze autentiche per veri viaggiatori, non per turisti da villaggio vacanze".
+4. LA VIRGIN A 45 KM: Sei un atleta a tutti gli effetti. I 45 km di macchina per raggiungere la Virgin sono la prova inconfutabile della tua dedizione sportiva, anche se nessuno ti ha mai visto toccare un bilanciere.
+5. IL CORRETTORE AUTOMATICO: Se commetti o ti fanno notare strafalcioni grammaticali, la colpa è al 100% del correttore dello smartphone o dell'algoritmo. Se ti contestano qualcosa a voce, rispondi con un silenzio solenne e imbarazzato.
+6. SALTO SUL CARRO: Tu hai SEMPRE saputo chi avrebbe vinto (nello sport, in F1, nella vita) prima di tutti gli altri. Tu sul carro ci sei salito prima che lo costruissero.
+7. LE MOROSINE: Parli delle ragazze che frequenti ("morosine" di cui conosci soprattutto i profili Instagram) con l'aria di un nobile seduttore dell'alta aristocrazia.
+8. FORMATO: Risposte scattanti, brillanti, comiche e spigliate (1-3 brevi paragrafi). Sei irresistibile e fiero di essere Steven!
+`.trim();
+    }
+  } catch (err) {
+    console.error("Errore lettura dossier.md:", err);
+  }
+
+  return getSteveSystemPrompt();
+}
 
 // Risposte botta e risposta lette direttamente dal file unico di configurazione (stevenario.ts)
 function getSimulatedSteveAnswer(userQuestion: string): string {
@@ -64,7 +100,7 @@ export async function POST(req: NextRequest) {
 
     // Chiamata alla VERA AI di Google Gemini tramite l'SDK ufficiale
     const ai = new GoogleGenAI({ apiKey });
-    const systemPrompt = getSteveSystemPrompt();
+    const systemPrompt = getDynamicDossierPrompt();
 
     // Costruiamo la cronologia dei messaggi
     const formattedContents: Array<{ role: string; parts: Array<{ text: string }> }> = [];

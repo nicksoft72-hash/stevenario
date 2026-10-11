@@ -58,22 +58,22 @@ export const SITE_CONFIG = {
   // ==========================================================================
   // 👤 3. PROFILO & TESTI GENERALI
   // ==========================================================================
-  friendName: "Steve",
-  nickname: "Il Maestro del 'Arrivo tra 5 minuti'",
-  subtitle: "L'Intelligenza Artificiale addestrata da Nick sulle vere perle, tic e scuse cosmiche di Steve.",
-  statusText: "🟢 Online (in realtà sta ancora dormendo)",
+  friendName: "Steven",
+  nickname: "L'atleta invisibile di Mulino",
+  subtitle: "L'Intelligenza Artificiale addestrata sul dossier segreto: Bologna, Bucarest, la Virgin e il mistero del 2015.",
+  statusText: "🟢 In treno verso Bologna",
 
-  // Messaggio iniziale con cui Steve accoglie gli amici appena aprono la chat
-  welcomeMessage: "Oh, ciao ragà! Ditemi pure, ma fate in fretta che tra 5 minuti devo uscire (spoiler: non è vero, sono ancora sul divano in pigiama). Cosa volete sapere?",
+  // Messaggio iniziale con cui Steven accoglie gli amici appena aprono la chat
+  welcomeMessage: "Oh ragà, sono appena sceso dal treno a Bologna per il panino e il pedicure con Val! Ditemi pure, ma fate in fretta che poi devo fare 45 km per la Virgin e prima di cena torno a casa.",
 
   // Il badge sopra il titolo "Benvenuti nello Stevenario"
-  headerBadgeText: "Edizione Speciale Amici",
+  headerBadgeText: "Dossier Riservato",
 
   // Testo in fondo alla pagina (footer)
-  footerText: "Creato da Nick per farsi due risate tra amici.",
+  footerText: "Creato da Nick per celebrare il mito di Steven.",
 
   // Testo accanto al cuore nel menù Informazioni (tasto 'i')
-  infoFooterBadge: "Risate tra amici",
+  infoFooterBadge: "Caso Irrisolto",
 
   // ==========================================================================
   // ℹ️ 4. INFORMAZIONI CREATORE (visibili cliccando su 'i' in alto)
@@ -82,18 +82,18 @@ export const SITE_CONFIG = {
     creator: "Nick",
     creationDate: "11 Ottobre 2026",
     lastUpdated: "11 Ottobre 2026",
-    notes: "Progetto goliardico creato per gli amici. Ogni riferimento a ritardi reali è puramente voluto."
+    notes: "Dossier biografico non autorizzato. Dal 2015 niente è più come prima."
   },
 
   // ==========================================================================
   // 💡 5. BOTTONCINI DELLE DOMANDE RAPIDE (sotto la chat)
   // ==========================================================================
   suggestedQuestions: [
-    "Steve, a che punto sei? Ci sei quasi?",
-    "Steve, stasera pizza o sushi? Chi paga?",
-    "Steve, mi si è rotto il rubinetto, che faccio?",
-    "Steve, andiamo a correre domani mattina alle 7:00?",
-    "Steve, qual è il tuo segreto per non avere mai torto?"
+    "Steven, cosa è successo veramente nel 2015?",
+    "Steven, andiamo in vacanza insieme a Bucarest?",
+    "Steven, oggi vai in palestra alla Virgin?",
+    "Steven, ci vediamo stasera a Bologna per l'aperitivo?",
+    "Steven, presentaci una delle tue morosine di Instagram!"
   ],
 
   // ==========================================================================
