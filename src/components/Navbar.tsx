@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Volume2, VolumeX, BookOpen, Info, Share2, Check } from "lucide-react";
 import { sound } from "@/lib/sound";
+import { SITE_CONFIG } from "@/config/stevenario";
 
 interface NavbarProps {
   onOpenGlossary: () => void;
@@ -26,8 +27,8 @@ export function Navbar({ onOpenGlossary, onOpenInfo }: NavbarProps) {
       try {
         if (navigator.share) {
           await navigator.share({
-            title: "Stevenario - L'AI Ufficiale di Steve",
-            text: "Fai una domanda all'Oracolo di Steve prima che cambi idea!",
+            title: `${SITE_CONFIG.friendName}nario - L'AI Ufficiale di ${SITE_CONFIG.friendName}`,
+            text: `Fai una domanda all'Oracolo di ${SITE_CONFIG.friendName} prima che cambi idea!`,
             url: window.location.href,
           });
         } else {
@@ -36,7 +37,7 @@ export function Navbar({ onOpenGlossary, onOpenInfo }: NavbarProps) {
           setTimeout(() => setCopiedLink(false), 2500);
         }
       } catch {
-        // Ignora se l'utente annulla la condivisione
+        // Ignora annullamento
       }
     }
   };
@@ -47,7 +48,7 @@ export function Navbar({ onOpenGlossary, onOpenInfo }: NavbarProps) {
         {/* Brand */}
         <div className="flex items-center gap-2.5 sm:gap-3">
           <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-indigo-600 text-white font-black text-lg sm:text-xl shadow-md shadow-rose-500/20">
-            S
+            {SITE_CONFIG.friendName.charAt(0)}
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
@@ -57,28 +58,31 @@ export function Navbar({ onOpenGlossary, onOpenInfo }: NavbarProps) {
           <div>
             <div className="flex items-center gap-1.5">
               <h1 className="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight">
-                Stevenario
+                {SITE_CONFIG.friendName}nario
               </h1>
               <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-amber-100 text-amber-800 border border-amber-200">
                 AI
               </span>
             </div>
             <p className="text-[11px] text-slate-500 hidden sm:block">
-              L&apos;Oracolo AI addestrato sulle perle e i ritardi di Steve
+              L&apos;Oracolo AI addestrato sulle perle e i ritardi di {SITE_CONFIG.friendName}
             </p>
           </div>
         </div>
 
         {/* Actions - Touch friendly */}
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <button
-            onClick={onOpenGlossary}
-            className="flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 transition active:scale-95 cursor-pointer min-h-[36px]"
-            title="Dizionario dei modi di dire"
-          >
-            <BookOpen className="w-3.5 h-3.5 text-rose-500 shrink-0" />
-            <span className="text-xs">Dizionario</span>
-          </button>
+          {/* Pulsante dizionario configurabile */}
+          {SITE_CONFIG.showGlossaryButtonInNav && (
+            <button
+              onClick={onOpenGlossary}
+              className="flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 transition active:scale-95 cursor-pointer min-h-[36px]"
+              title="Dizionario dei modi di dire"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+              <span className="text-xs">Dizionario</span>
+            </button>
+          )}
 
           <button
             onClick={toggleAudio}

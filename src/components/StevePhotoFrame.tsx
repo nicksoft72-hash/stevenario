@@ -4,15 +4,19 @@ import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { RefreshCw, Camera, Sparkles } from "lucide-react";
 import { sound } from "@/lib/sound";
+import { SITE_CONFIG } from "@/config/stevenario";
 
 interface StevePhotoFrameProps {
   initialPhotos?: string[];
 }
 
 export function StevePhotoFrame({ initialPhotos = ["/steve-photos/steve-1.jpg", "/steve-photos/steve-2.jpg"] }: StevePhotoFrameProps) {
+  const rotationSeconds = SITE_CONFIG.photoRotationSeconds || 60;
+  const showCountdown = SITE_CONFIG.showPhotoCountdown ?? false;
+
   const [photos, setPhotos] = useState<string[]>(initialPhotos);
   const [currentIdx, setCurrentIdx] = useState<number>(0);
-  const [secondsLeft, setSecondsLeft] = useState<number>(60);
+  const [secondsLeft, setSecondsLeft] = useState<number>(rotationSeconds);
   const [isFading, setIsFading] = useState<boolean>(false);
 
   // Carica l'elenco foto dinamico da /api/photos
@@ -43,24 +47,24 @@ export function StevePhotoFrame({ initialPhotos = ["/steve-photos/steve-1.jpg", 
       }
       setCurrentIdx(nextIdx);
       setIsFading(false);
-      setSecondsLeft(60);
+      setSecondsLeft(rotationSeconds);
     }, 300);
-  }, [photos, currentIdx]);
+  }, [photos, currentIdx, rotationSeconds]);
 
-  // Timer di 60 secondi
+  // Timer di rotazione automatica
   useEffect(() => {
     const timer = setInterval(() => {
       setSecondsLeft((prev) => {
         if (prev <= 1) {
           changeToRandomPhoto();
-          return 60;
+          return rotationSeconds;
         }
         return prev - 1;
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [changeToRandomPhoto]);
+  }, [changeToRandomPhoto, rotationSeconds]);
 
   const handleManualShuffle = () => {
     sound.playClick();
@@ -94,16 +98,21 @@ export function StevePhotoFrame({ initialPhotos = ["/steve-photos/steve-1.jpg", 
           <span>Steve in Azione</span>
         </div>
 
-        {/* Pulsante cambio manuale + indicatore 60s in basso */}
+        {/* Controlli in basso */}
         <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between text-white text-[11px]">
-          <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full">
-            <Sparkles className="w-3 h-3 text-amber-300" />
-            <span>Nuova foto tra: <strong>{secondsLeft}s</strong></span>
-          </div>
+          {/* Mostra il countdown SOLO se abilitato da config (default: NO) */}
+          {showCountdown ? (
+            <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full">
+              <Sparkles className="w-3 h-3 text-amber-300" />
+              <span>Nuova foto tra: <strong>{secondsLeft}s</strong></span>
+            </div>
+          ) : (
+            <div></div>
+          )}
 
           <button
             onClick={handleManualShuffle}
-            className="flex items-center gap-1 bg-white/95 hover:bg-white text-slate-900 font-medium px-2.5 py-1 rounded-full shadow-md active:scale-95 transition cursor-pointer"
+            className="flex items-center gap-1 bg-white/95 hover:bg-white text-slate-900 font-medium px-2.5 py-1 rounded-full shadow-md active:scale-95 transition cursor-pointer ml-auto"
             title="Cambia subito foto"
           >
             <RefreshCw className="w-3 h-3 text-indigo-600" />
@@ -111,11 +120,11 @@ export function StevePhotoFrame({ initialPhotos = ["/steve-photos/steve-1.jpg", 
           </button>
         </div>
 
-        {/* Barra di progresso discreta per i 60 secondi */}
+        {/* Barra di progresso discreta per la rotazione */}
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
           <div
             className="h-full bg-gradient-to-r from-amber-400 to-indigo-500 transition-all duration-1000 ease-linear"
-            style={{ width: `${((60 - secondsLeft) / 60) * 100}%` }}
+            style={{ width: `${((rotationSeconds - secondsLeft) / rotationSeconds) * 100}%` }}
           ></div>
         </div>
       </div>

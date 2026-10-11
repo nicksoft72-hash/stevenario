@@ -1,33 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
-import { getSteveSystemPrompt } from "@/config/stevenario";
+import { getSteveSystemPrompt, SITE_CONFIG } from "@/config/stevenario";
 
-// Risposte fallback intelligenti e divertenti quando la chiave Gemini non è ancora configurata
+// Risposte botta e risposta lette direttamente dal file unico di configurazione (stevenario.ts)
 function getSimulatedSteveAnswer(userQuestion: string): string {
   const q = userQuestion.toLowerCase();
   
-  if (q.includes("dove sei") || q.includes("ritardo") || q.includes("punto sei") || q.includes("quando arrivi")) {
-    return "Tranqui ragà, sono praticamente già sotto casa vostra! Sto solo trovando parcheggio... che tradotto in lingua comune vuol dire che ho appena finito la doccia e sto decidendo quale maglietta mettere.\n\n*«La puntualità è una convenzione sociale inventata da chi non sa godersi l'attesa.»*";
-  }
-  
-  if (q.includes("pizza") || q.includes("mangiare") || q.includes("cena") || q.includes("paga") || q.includes("sushi") || q.includes("aperitivo")) {
-    return "Io stasera sto leggero, solo un assaggio per compagnia! Poi però ordino l'intero menù e offrite voi perché 'il mese scorso ho lasciato 2 euro di mancia al bar'. Andiamo dove c'è il tagliere abbondante, fidatevi di me!\n\n*«Chi divide il conto divide l'amicizia, quindi pagate voi.»*";
-  }
-  
-  if (q.includes("lavoro") || q.includes("correre") || q.includes("palestra") || q.includes("mattina") || q.includes("aiuto")) {
-    return "Guarda, ci stavo pensando proprio ieri: l'idea è magnifica, ma l'oroscopo e il bioritmo oggi me lo sconsigliano severamente. Domani mi sveglio alle 6:00 e spacco tutto, promesso (spoiler: spegnerò 4 sveglie).\n\n*«Non rimandare a domani quello che puoi evitare per sempre.»*";
+  // 1. Controlla se la domanda corrisponde a una regola con parole chiave
+  if (Array.isArray(SITE_CONFIG.bottaERisposta)) {
+    for (const rule of SITE_CONFIG.bottaERisposta) {
+      if (rule.keywords && rule.keywords.some((k) => q.includes(k.toLowerCase()))) {
+        return rule.reply;
+      }
+    }
   }
 
-  // Risposta generica in pieno stile Steve
-  const randomPhrases = [
-    "Dipende da come la vedi! Scientificamente parlando hai ragione tu, ma filosoficamente parlando ho ragione io al 100%. Comunque ci penso io, conosco uno che risolve tutto.",
-    "Ma sì, tanto che ci vuole? Due minuti, un colpo di nastro adesivo e risolviamo. Se poi salta la corrente è colpa del fornitore energetico.",
-    "Ti rispondo con calma appena arrivo al bar. Mettimi da parte uno spritz intanto, che ho avuto una giornata impegnatissima a fare cose importantissime.",
-    "È una domanda complessa. La risposta breve è: hai torto. La risposta lunga è: hai torto, ma con argomentazioni più dettagliate."
-  ];
+  // 2. Se non corrisponde, seleziona una risposta a caso dall'elenco generico
+  const randomList = SITE_CONFIG.risposteCasualiGeneriche;
+  if (Array.isArray(randomList) && randomList.length > 0) {
+    return randomList[Math.floor(Math.random() * randomList.length)];
+  }
 
-  const pick = randomPhrases[Math.floor(Math.random() * randomPhrases.length)];
-  return `${pick}\n\n*«Steve ha parlato. Ora offrimi da bere.»*`;
+  return "Dipende da come la vedi! Comunque ci penso io, conosco uno.\n\n*«Steve ha parlato. Ora offrimi da bere.»*";
 }
 
 export async function POST(req: NextRequest) {
@@ -44,7 +38,7 @@ export async function POST(req: NextRequest) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    // Se non c'è la chiave API, usiamo la modalità intelligente simulata
+    // Se non c'è la chiave API, usiamo la modalità simulata intelligente con le risposte di stevenario.ts
     if (!apiKey || apiKey === "TUACHIAVE_QUI" || apiKey.trim() === "") {
       const simulatedReply = getSimulatedSteveAnswer(message);
       return NextResponse.json({

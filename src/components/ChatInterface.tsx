@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { DEFAULT_STEVE_CONFIG } from "@/config/stevenario";
+import { DEFAULT_STEVE_CONFIG, SITE_CONFIG } from "@/config/stevenario";
 import { Send, Bot, User, Sparkles, RotateCcw, Copy, Check, Share2 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { sound } from "@/lib/sound";
@@ -18,7 +18,7 @@ export function ChatInterface() {
     {
       id: "welcome",
       sender: "steve",
-      text: "Oh, ciao ragà! Ditemi pure, ma fate in fretta che tra 5 minuti devo uscire (spoiler: non è vero, sono ancora sul divano in pigiama). Cosa volete sapere?",
+      text: SITE_CONFIG.welcomeMessage,
       timestamp: "Adesso",
     },
   ]);
