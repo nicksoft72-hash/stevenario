@@ -33,7 +33,7 @@ export async function GET() {
 
   return NextResponse.json({
     isAiConnected,
-    model: "Google Gemini 2.5 Flash",
+    model: "Google Gemini 3.5 Flash",
     trainer: SITE_CONFIG.info.creator,
   });
 }
@@ -86,9 +86,9 @@ export async function POST(req: NextRequest) {
       parts: [{ text: message }]
     });
 
-    // Generazione della risposta con il modello Gemini 2.5 Flash addestrato
+    // Generazione della risposta con il modello Google Gemini 3.5 Flash addestrato
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.5-flash",
       contents: formattedContents,
       config: {
         systemInstruction: systemPrompt,
