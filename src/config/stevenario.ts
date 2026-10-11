@@ -6,9 +6,9 @@ export interface StevePhrase {
   rarity: 'Comune' | 'Rara' | 'Leggendaria';
 }
 
-export interface SteveExcuse {
+export interface Stevenata {
   category: string;
-  excuse: string;
+  text: string;
 }
 
 export const DEFAULT_STEVE_CONFIG = {
@@ -16,13 +16,21 @@ export const DEFAULT_STEVE_CONFIG = {
   nickname: "Il Maestro del 'Arrivo tra 5 minuti'",
   subtitle: "L'Intelligenza Artificiale non allineata, addestrata sulle migliori perle e modi di dire di Steve.",
   statusText: "🟢 Online (in realtà sta ancora dormendo)",
-  avatarUrl: "https://api.dicebear.com/7.x/bottts-neutral/svg?seed=Steve&backgroundColor=6366f1",
   
+  // Info progetto
+  info: {
+    creator: "Nick",
+    creationDate: "11 Ottobre 2026",
+    lastUpdated: "11 Ottobre 2026",
+    version: "2.5 Mobile Edition",
+    notes: "Progetto goliardico creato per gli amici. Ogni riferimento a ritardi reali è puramente voluto."
+  },
+
   stats: [
     { label: "Puntualità", value: "3%", description: "Calcolata con fuso orario proprio" },
-    { label: "Presenza agli aperitivi", value: "100%", description: "Imbattibile dalle 19:00" },
-    { label: "Abilità nel cambiare discorso", value: "98%", description: "Cintura nera di deviazione" },
-    { label: "Modi di dire al minuto", value: "4.2", description: "Nuovo record provinciale" },
+    { label: "Presenza aperitivi", value: "100%", description: "Imbattibile dalle 19:00" },
+    { label: "Abilità nel divagare", value: "98%", description: "Cintura nera di deviazione" },
+    { label: "Perle al minuto", value: "4.2", description: "Nuovo record provinciale" },
   ],
 
   // I modi di dire tipici memorizzati
@@ -71,17 +79,18 @@ export const DEFAULT_STEVE_CONFIG = {
     }
   ] as StevePhrase[],
 
-  // Scuse leggendarie generabili con un click
-  excuses: [
-    { category: "Traffico", excuse: "C'era una processione di trattori d'epoca sulla tangenziale, non potevo sorpassare per rispetto delle tradizioni." },
-    { category: "Batteria", excuse: "Il telefono era al 2% e si è spento per salvare l'anima della batteria." },
-    { category: "Lavoro", excuse: "Mi hanno incastrato in una call 'veloce' che è durata due ere geologiche." },
-    { category: "Fisica quantistica", excuse: "Io ero partito puntuale, è lo spaziotempo che ha curvato la mia traiettoria." },
-    { category: "Meteo", excuse: "Davano pioggia a Tokyo quindi prudenzialmente sono rimasto sul divano." },
-    { category: "Logistica", excuse: "Il gatto si è addormentato sulle mie scarpe e non potevo svegliarlo, sarebbe stato reato morale." }
-  ] as SteveExcuse[],
+  // Stevenate generabili con un click
+  stevenate: [
+    { category: "Traffico & Spazio", text: "C'era una processione di trattori d'epoca sulla tangenziale, non potevo sorpassare per rispetto delle tradizioni." },
+    { category: "Tecnologia", text: "Il telefono era al 2% e si è spento per preservare l'anima della batteria." },
+    { category: "Lavoro", text: "Mi hanno incastrato in una call 'veloce' durata due ere geologiche e mezza." },
+    { category: "Fisica Quantistica", text: "Io ero partito puntualissimo, è lo spaziotempo che ha curvato la mia traiettoria." },
+    { category: "Meteo", text: "Davano pioggia a Tokyo, quindi prudenzialmente sono rimasto sul divano." },
+    { category: "Priorità", text: "Il gatto si è addormentato sulle mie scarpe e non potevo svegliarlo, sarebbe stato reato morale." },
+    { category: "Filosofia", text: "Non sono in ritardo io: siete voi che siete arrivati con un anticipo privo di buonsenso." },
+    { category: "Cucina", text: "Oggi faccio digiuno... a parte quel piatto di carbonara che non potevo lasciare solo." }
+  ] as Stevenata[],
 
-  // Prompt di sistema base (può essere arricchito tramite Vercel ENV `STEVENARIO_CUSTOM_PROMPT`)
   baseSystemPrompt: `
 Sei "Stevenario", l'incarnazione AI parodistica e satirica di Steve (Stefano / l'amico del gruppo).
 Rispondi agli amici di Steve imitando alla perfezione i suoi modi di dire, il suo gergo, la sua ironia e i suoi classici alibi.
@@ -109,11 +118,10 @@ Linee guida di personalità:
   ]
 };
 
-// Funzione helper per ottenere il prompt finale (unisce il base con eventuali override da Vercel)
 export function getSteveSystemPrompt(): string {
   const customOverride = process.env.STEVENARIO_CUSTOM_PROMPT;
   if (customOverride && customOverride.trim().length > 0) {
-    return `${DEFAULT_STEVE_CONFIG.baseSystemPrompt}\n\nAGGIORNAMENTI SPECIFICI PERSONALITÀ (DA VERCEL):\n${customOverride.trim()}`;
+    return `${DEFAULT_STEVE_CONFIG.baseSystemPrompt}\n\nAGGIORNAMENTI SPECIFICI PERSONALITÀ:\n${customOverride.trim()}`;
   }
   return DEFAULT_STEVE_CONFIG.baseSystemPrompt;
 }

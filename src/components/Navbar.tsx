@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Volume2, VolumeX, Sparkles, MessageSquareHeart, Info, Share2, Check } from "lucide-react";
+import { Volume2, VolumeX, BookOpen, Info, Share2, Check } from "lucide-react";
 import { sound } from "@/lib/sound";
 
 interface NavbarProps {
@@ -42,11 +42,11 @@ export function Navbar({ onOpenGlossary, onOpenInfo }: NavbarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md bg-neutral-950/80 border-b border-neutral-800/80 transition-all">
-      <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+    <header className="sticky top-0 z-50 backdrop-blur-md bg-white/90 border-b border-slate-200/90 transition-all shadow-xs">
+      <div className="max-w-4xl mx-auto px-3.5 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between">
         {/* Brand */}
-        <div className="flex items-center gap-3">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-indigo-600 text-white font-black text-xl shadow-lg shadow-rose-500/20 ring-1 ring-white/20">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-indigo-600 text-white font-black text-lg sm:text-xl shadow-md shadow-rose-500/20">
             S
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -55,34 +55,37 @@ export function Navbar({ onOpenGlossary, onOpenInfo }: NavbarProps) {
           </div>
 
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-extrabold text-lg sm:text-xl text-neutral-100 tracking-tight">
-                Stevenario <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-amber-500/10 text-amber-400 border border-amber-500/30">v2.5 AI</span>
+            <div className="flex items-center gap-1.5">
+              <h1 className="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight">
+                Stevenario
               </h1>
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                AI
+              </span>
             </div>
-            <p className="text-xs text-neutral-400 hidden sm:block">
+            <p className="text-[11px] text-slate-500 hidden sm:block">
               L&apos;Oracolo AI addestrato sulle perle e i ritardi di Steve
             </p>
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-2">
+        {/* Actions - Touch friendly */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={onOpenGlossary}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-800 transition"
+            className="flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 transition active:scale-95 cursor-pointer min-h-[36px]"
             title="Dizionario dei modi di dire"
           >
-            <MessageSquareHeart className="w-4 h-4 text-rose-400" />
-            <span className="hidden sm:inline">Dizionario</span>
+            <BookOpen className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+            <span className="text-xs">Dizionario</span>
           </button>
 
           <button
             onClick={toggleAudio}
-            className={`p-2 rounded-lg border transition text-xs ${
+            className={`p-2 rounded-lg border transition text-xs min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer ${
               audioEnabled
-                ? "bg-neutral-900 border-neutral-800 text-amber-400 hover:bg-neutral-800"
-                : "bg-neutral-900/50 border-neutral-800 text-neutral-500 hover:text-neutral-300"
+                ? "bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100"
+                : "bg-slate-100 border-slate-200 text-slate-400 hover:text-slate-600"
             }`}
             title={audioEnabled ? "Audio attivo" : "Audio disattivato"}
           >
@@ -91,17 +94,17 @@ export function Navbar({ onOpenGlossary, onOpenInfo }: NavbarProps) {
 
           <button
             onClick={handleShare}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600/90 hover:bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition active:scale-95"
+            className="flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm shadow-indigo-600/20 transition active:scale-95 cursor-pointer min-h-[36px]"
             title="Condividi con il gruppo"
           >
-            {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Share2 className="w-3.5 h-3.5" />}
-            <span className="hidden sm:inline">{copiedLink ? "Copiato!" : "Condividi"}</span>
+            {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-200" /> : <Share2 className="w-3.5 h-3.5" />}
+            <span className="hidden xs:inline">{copiedLink ? "Copiato!" : "Condividi"}</span>
           </button>
 
           <button
             onClick={onOpenInfo}
-            className="p-2 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-white border border-neutral-800 transition"
-            title="Come personalizzare Steve e configurare Vercel"
+            className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border border-slate-200 transition cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
+            title="Info sul progetto"
           >
             <Info className="w-4 h-4" />
           </button>

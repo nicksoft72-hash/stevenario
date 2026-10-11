@@ -4,11 +4,12 @@ import React, { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ChatInterface } from "@/components/ChatInterface";
 import { SteveStats } from "@/components/SteveStats";
-import { ExcuseGenerator } from "@/components/ExcuseGenerator";
+import { StevenateGenerator } from "@/components/StevenateGenerator";
+import { StevePhotoFrame } from "@/components/StevePhotoFrame";
 import { GlossaryModal } from "@/components/GlossaryModal";
-import { InfoGuideModal } from "@/components/InfoGuideModal";
+import { InfoModal } from "@/components/InfoModal";
 import { DEFAULT_STEVE_CONFIG } from "@/config/stevenario";
-import { BookOpen, Sparkles, MessageCircleQuestion, Coffee, Flame } from "lucide-react";
+import { BookOpen, Flame } from "lucide-react";
 import { sound } from "@/lib/sound";
 
 export default function Home() {
@@ -16,64 +17,63 @@ export default function Home() {
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-neutral-950 text-neutral-100 selection:bg-indigo-500 selection:text-white relative overflow-hidden">
-      {/* Decorative gradient glow in background */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-indigo-600/15 via-rose-500/10 to-transparent blur-3xl pointer-events-none -z-10"></div>
-      <div className="absolute top-1/3 right-0 w-[450px] h-[450px] bg-amber-500/10 blur-[120px] pointer-events-none -z-10"></div>
-
-      {/* Header */}
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-indigo-600 selection:text-white relative">
+      {/* Navbar con controlli rapidi */}
       <Navbar
         onOpenGlossary={() => setIsGlossaryOpen(true)}
         onOpenInfo={() => setIsInfoOpen(true)}
       />
 
-      {/* Main Content */}
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-6 sm:py-8 space-y-6 sm:space-y-8">
+      {/* Main Content - Mobile-first container */}
+      <main className="flex-1 max-w-4xl w-full mx-auto px-3.5 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Hero Section */}
-        <div className="text-center space-y-2.5 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-300 shadow-inner">
-            <Flame className="w-3.5 h-3.5 text-amber-400" />
-            <span>Edizione Speciale Amici & Gruppo WhatsApp</span>
+        <div className="text-center space-y-2 max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200/90 text-xs font-medium text-slate-700 shadow-2xs">
+            <Flame className="w-3.5 h-3.5 text-amber-500" />
+            <span>Edizione Speciale Amici</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
+          <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
             Benvenuti nello{" "}
-            <span className="bg-gradient-to-r from-amber-400 via-rose-400 to-indigo-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-amber-500 via-rose-500 to-indigo-600 bg-clip-text text-transparent">
               Stevenario
             </span>
           </h1>
 
-          <p className="text-sm sm:text-base text-neutral-400 leading-relaxed">
+          {/* Riquadro con foto a rotazione ogni 60s (16:9) posizionato tra il titolo e la descrizione */}
+          <StevePhotoFrame />
+
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-xl mx-auto">
             {DEFAULT_STEVE_CONFIG.subtitle} Fagli una domanda: ti risponderà con la sua proverbiale filosofia, un ritardo ingiustificato e una scusa inoppugnabile.
           </p>
         </div>
 
-        {/* Core Layout: 2 Columns on desktop, 1 on mobile */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Main Chat Column (7 cols) */}
+        {/* Layout responsive: Su mobile prima la Chat per massima reattività */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-start">
+          {/* Colonna Chat (Mobile: in primo piano, Desktop: 7 cols) */}
           <div className="lg:col-span-7 space-y-4">
             <ChatInterface />
           </div>
 
-          {/* Side Column with Steve's Tools & Stats (5 cols) */}
+          {/* Colonna Strumenti & Stevenate (Mobile: a seguire, Desktop: 5 cols) */}
           <div className="lg:col-span-5 space-y-4">
-            {/* Stats Card */}
+            {/* Generatore di Stevenate */}
+            <StevenateGenerator />
+
+            {/* Scheda Statistiche Steve */}
             <SteveStats />
 
-            {/* Excuse Generator */}
-            <ExcuseGenerator />
-
-            {/* Callout Card to Open Glossary */}
-            <div className="p-4 rounded-2xl bg-neutral-900/60 border border-neutral-800 flex items-center justify-between gap-3 backdrop-blur-sm">
+            {/* Banner Dizionario dei modi di dire */}
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                <div className="p-2.5 rounded-xl bg-purple-50 text-purple-600 border border-purple-100">
                   <BookOpen className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-neutral-200">
+                  <h4 className="text-xs sm:text-sm font-bold text-slate-900">
                     Il Grande Libro di Steve
                   </h4>
-                  <p className="text-[11px] text-neutral-400">
+                  <p className="text-[11px] text-slate-500">
                     Tutti i modi di dire tradotti dal gergo originale
                   </p>
                 </div>
@@ -84,7 +84,7 @@ export default function Home() {
                   sound.playClick();
                   setIsGlossaryOpen(true);
                 }}
-                className="px-3 py-1.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold text-neutral-200 hover:text-white transition whitespace-nowrap cursor-pointer active:scale-95"
+                className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-white transition whitespace-nowrap cursor-pointer active:scale-95 min-h-[38px]"
               >
                 Esplora
               </button>
@@ -93,15 +93,15 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-neutral-900 bg-neutral-950/80 py-6 px-4 mt-8 text-center text-xs text-neutral-500 space-y-2">
-        <div className="flex items-center justify-center gap-4 text-neutral-400">
+      {/* Footer pulito senza riferimenti a deploy o Vercel */}
+      <footer className="border-t border-slate-200/80 bg-white py-5 px-4 mt-6 text-center text-xs text-slate-500 space-y-2">
+        <div className="flex items-center justify-center gap-3 text-slate-600 font-medium">
           <button
             onClick={() => {
               sound.playClick();
               setIsGlossaryOpen(true);
             }}
-            className="hover:text-white transition"
+            className="hover:text-indigo-600 transition cursor-pointer py-1"
           >
             Dizionario
           </button>
@@ -111,23 +111,23 @@ export default function Home() {
               sound.playClick();
               setIsInfoOpen(true);
             }}
-            className="hover:text-white transition"
+            className="hover:text-indigo-600 transition cursor-pointer py-1"
           >
-            Guida Deploy & Gemini API
+            Informazioni
           </button>
         </div>
-        <p>
-          Stevenario © 2026 — Creato a scopo goliardico per farsi due risate tra amici. Nessun amico è stato maltrattato durante l&apos;addestramento dell&apos;AI.
+        <p className="text-[11px] text-slate-400">
+          Stevenario © 2026 — Creato da Nick per farsi due risate tra amici. Nessun amico è stato maltrattato durante l&apos;addestramento dell&apos;AI.
         </p>
       </footer>
 
-      {/* Modals */}
+      {/* Modali */}
       <GlossaryModal
         isOpen={isGlossaryOpen}
         onClose={() => setIsGlossaryOpen(false)}
       />
 
-      <InfoGuideModal
+      <InfoModal
         isOpen={isInfoOpen}
         onClose={() => setIsInfoOpen(false)}
       />

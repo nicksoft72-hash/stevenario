@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
-import { getSteveSystemPrompt, DEFAULT_STEVE_CONFIG } from "@/config/stevenario";
+import { getSteveSystemPrompt } from "@/config/stevenario";
 
 // Risposte fallback intelligenti e divertenti quando la chiave Gemini non è ancora configurata
 function getSimulatedSteveAnswer(userQuestion: string): string {
@@ -37,20 +37,19 @@ export async function POST(req: NextRequest) {
 
     if (!message || typeof message !== "string") {
       return NextResponse.json(
-        { error: "Messaggio mancante o non valido." },
+        { error: "Messaggio non valido." },
         { status: 400 }
       );
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    // Se non c'è la chiave API, usiamo la modalità simulata intelligente
+    // Se non c'è la chiave API, usiamo la modalità intelligente simulata
     if (!apiKey || apiKey === "TUACHIAVE_QUI" || apiKey.trim() === "") {
       const simulatedReply = getSimulatedSteveAnswer(message);
       return NextResponse.json({
         reply: simulatedReply,
         isSimulated: true,
-        notice: "💡 Modalità offline: Aggiungi GEMINI_API_KEY nelle Environment Variables di Vercel per attivare Gemini AI dal vivo!"
       });
     }
 
@@ -62,7 +61,6 @@ export async function POST(req: NextRequest) {
     const formattedContents: Array<{ role: string; parts: Array<{ text: string }> }> = [];
 
     if (Array.isArray(history) && history.length > 0) {
-      // Limitiamo agli ultimi 6 scambi per rapidità ed efficienza di token
       const recentHistory = history.slice(-6);
       for (const item of recentHistory) {
         if (item.sender === "user") {
@@ -73,13 +71,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Aggiungiamo il messaggio corrente
     formattedContents.push({
       role: "user",
       parts: [{ text: message }]
     });
 
-    // Richiesta a Gemini (usando gemini-2.5-flash)
+    // Richiesta a Gemini (gemini-2.5-flash)
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: formattedContents,
@@ -90,21 +87,18 @@ export async function POST(req: NextRequest) {
       }
     });
 
-    const replyText = response.text || "Boh, ho il cervello in buffering come al solito. Riprova tra 5 minuti!";
+    const replyText = response.text || "Boh, ho il cervello in standby. Riprova tra 5 minuti!";
 
     return NextResponse.json({
       reply: replyText,
       isSimulated: false
     });
   } catch (error: unknown) {
-    console.error("Errore nella chiamata a Stevenario:", error);
-    
-    // In caso di errore API (es. quota esaurita o chiave non valida), facciamo un graceful fallback
+    console.error("Errore API:", error);
     const simulatedFallback = getSimulatedSteveAnswer("generica");
     return NextResponse.json({
-      reply: `${simulatedFallback}\n\n*(Nota tecnica: c'è stato un piccolo intoppo di rete con le API, ma Steve ha comunque trovato una scusa).*`,
-      isSimulated: true,
-      errorNotice: error instanceof Error ? error.message : "Errore sconosciuto"
+      reply: simulatedFallback,
+      isSimulated: true
     });
   }
 }
